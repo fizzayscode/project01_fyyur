@@ -9,11 +9,30 @@
 			<a href="/venues/{{ venue.id }}">
 				<i class="fas fa-music"></i>
 				<div class="item">
-					<h5>{{ venue.name }}</h5>
+					<h5 style="display:inline-block;"> {{ venue.name }} &nbsp; &nbsp; &nbsp;</h5>
 				</div>
-			</a>
+			</a>	
+			<button class="del-button" data-id="{{venue.id}}">   &cross; </button>
 		</li>
 		{% endfor %}
 	</ul>
 {% endfor %}
 {% endblock %}
+
+<script>
+	const delbtn=document.querySelectorAll('.del-button');
+	for(let i= 0; i<delbtn.length;i++){
+		const btn= delbtn[i];
+		btn.onclick((e)=>{
+			console.log('event',e);
+			const venueId= e.target.dataset['id']
+			console.log(venueId)
+			console.log(data-id)
+			fetch('/venues/'+venueId,{
+				method:'DELETE',
+
+			});
+		})
+	
+	}
+</script>

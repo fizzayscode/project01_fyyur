@@ -1,9 +1,16 @@
 from datetime import datetime
+from email import message
+import re
 from flask_wtf import Form
+from pyparsing import Regex
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField
-from wtforms.validators import DataRequired, AnyOf, URL
+from wtforms.validators import DataRequired, AnyOf, URL, ValidationError
+from flask_wtf import FlaskForm
 
 class ShowForm(Form):
+    def validate_phone(form, field):
+        if not re.search(r"^[0-9]{3}-[0-9]{3}-[0-9]{4}$",field.data):
+            raise ValidationError("phone number should be xxx-xxx-xxxx")
     artist_id = StringField(
         'artist_id'
     )
@@ -17,14 +24,18 @@ class ShowForm(Form):
     )
 
 class VenueForm(Form):
-    name = StringField(
+      def validate_phone(form, field):
+        if not re.search(r"^[0-9]{3}-[0-9]{3}-[0-9]{4}$",field.data):
+            raise ValidationError("phone number should be xxx-xxx-xxxx")
+    
+      name = StringField(
         'name', validators=[DataRequired()]
     )
-    city = StringField(
+      city = StringField(
         'city', validators=[DataRequired()]
     )
-    state = SelectField(
-        'state', validators=[DataRequired()],
+      state = SelectField(
+     'state', validators=[DataRequired()],
         choices=[
             ('AL', 'AL'),
             ('AK', 'AK'),
@@ -79,16 +90,18 @@ class VenueForm(Form):
             ('WY', 'WY'),
         ]
     )
-    address = StringField(
+      address = StringField(
         'address', validators=[DataRequired()]
     )
-    phone = StringField(
-        'phone'
+      phone = StringField(
+        'phone' ,validators=[DataRequired()]
+         
     )
-    image_link = StringField(
-        'image_link'
+        
+      image_link = StringField(
+        'image_link',validators=[URL()]
     )
-    genres = SelectMultipleField(
+      genres = SelectMultipleField(
         # TODO implement enum restriction
         'genres', validators=[DataRequired()],
         choices=[
@@ -113,29 +126,31 @@ class VenueForm(Form):
             ('Other', 'Other'),
         ]
     )
-    facebook_link = StringField(
+      facebook_link = StringField(
         'facebook_link', validators=[URL()]
     )
-    website_link = StringField(
-        'website_link'
+      website_link = StringField(
+        'website_link',validators=[URL()]
     )
+      seeking_talent = BooleanField( 'seeking_talent' )
 
-    seeking_talent = BooleanField( 'seeking_talent' )
-
-    seeking_description = StringField(
+      seeking_description = StringField(
         'seeking_description'
     )
 
 
 
 class ArtistForm(Form):
-    name = StringField(
+      def validate_phone(form, field):
+        if not re.search(r"^[0-9{3}-[0-9]{3}-[0-9]{4}$",field.data):
+            raise ValidationError("phone number should be xxx-xxx-xxxx")
+      name = StringField(
         'name', validators=[DataRequired()]
     )
-    city = StringField(
+      city = StringField(
         'city', validators=[DataRequired()]
     )
-    state = SelectField(
+      state = SelectField(
         'state', validators=[DataRequired()],
         choices=[
             ('AL', 'AL'),
@@ -191,14 +206,14 @@ class ArtistForm(Form):
             ('WY', 'WY'),
         ]
     )
-    phone = StringField(
+      phone = StringField(
         # TODO implement validation logic for state
-        'phone'
+        'phone', validators=[DataRequired()]
     )
-    image_link = StringField(
-        'image_link'
+      image_link = StringField(
+        'image_link',validators=[URL()]
     )
-    genres = SelectMultipleField(
+      genres = SelectMultipleField(
         'genres', validators=[DataRequired()],
         choices=[
             ('Alternative', 'Alternative'),
@@ -222,18 +237,18 @@ class ArtistForm(Form):
             ('Other', 'Other'),
         ]
      )
-    facebook_link = StringField(
+      facebook_link = StringField(
         # TODO implement enum restriction
         'facebook_link', validators=[URL()]
      )
 
-    website_link = StringField(
+      website_link = StringField(
         'website_link'
      )
 
-    seeking_venue = BooleanField( 'seeking_venue' )
+      seeking_venue = BooleanField( 'seeking_venue' )
 
-    seeking_description = StringField(
+      seeking_description = StringField(
             'seeking_description'
      )
 
